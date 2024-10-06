@@ -16,15 +16,15 @@ export const LoginSignup = () => {
     <div className="inputs">
     <div className="input">
     <img src={user_icon} alt="" />
-    <input type="text" />
+    <input type="text" placeholder='Name'/>
     </div>
     <div className="input">
     <img src={email_icon} alt="" />
-    <input type="email" />
+    <input type="email" placeholder='Email Id'/>
   </div>
   <div className="input">
     <img src={password_icon} alt="" />
-    <input type="password" />
+    <input type="password" placeholder='password'/>
   </div>
   </div>
   <div className="forgot-password">Lost Password?<span>Click Here!</span></div>
