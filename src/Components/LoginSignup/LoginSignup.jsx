@@ -4,6 +4,8 @@ import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'fire
 import { auth, db } from './firebaseConfig';
 import { doc, setDoc, getDoc } from 'firebase/firestore'; // <-- Make sure setDoc and getDoc are imported here
 import { useNavigate } from 'react-router-dom'; // Import useNavigate for redirection
+import { toast, ToastContainer } from 'react-toastify'; // Import toast and ToastContainer
+import 'react-toastify/dist/ReactToastify.css'; // Import toast styles
 
 import user_icon from '../Assets/person.png';
 import email_icon from '../Assets/email.png';
@@ -15,7 +17,6 @@ export const LoginSignup = () => {
   const [password, setPassword] = useState('');
   const [name, setName] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
-  const [successMessage, setSuccessMessage] = useState(''); // For signup success message
 
   const navigate = useNavigate(); // For navigation
 
@@ -23,56 +24,52 @@ export const LoginSignup = () => {
     try {
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       const userId = userCredential.user.uid; // Get the user ID (UID) from Firebase Authentication
-  
-      console.log("User ID after sign-up:", userId); // Debugging line
-  
+
       // Store user data in Firestore with the UID as the document ID
       await setDoc(doc(db, "users", userId), {
         name: name,
         email: email,
         createdAt: new Date()
       });
-  
-      console.log("User data saved to Firestore!"); // Debugging line
-  
-      // Show success message but do not redirect
-      setSuccessMessage("Sign up successful! Please log in.");
+
+      // Show toast message on successful sign-up
+      toast.success("Sign up successful! Please log in.");
+
       setAction("Login"); // Switch to Login mode after successful signup
     } catch (error) {
       setErrorMessage(error.message);
+      toast.error(error.message); // Show error message as toast
     }
   };
-  
-  
+
   const handleLogin = async () => {
     try {
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
       const userId = userCredential.user.uid; // Get the user ID (UID) from Firebase Authentication
-  
-      console.log("User ID after login:", userId); // Debugging line
-  
+
       // Fetch user data from Firestore using the UID
       const userDoc = await getDoc(doc(db, "users", userId));
       if (userDoc.exists()) {
         const userData = userDoc.data();
-  
-        console.log("User data retrieved from Firestore:", userData); // Debugging line
-  
+
         // Redirect to home page and pass email and name from Firestore
         navigate('/home', { state: { email: userData.email, name: userData.name } });
+
+        // Show toast message on successful login
+        toast.success("Login successful!");
       } else {
-        console.log("No user data found for UID:", userId); // Debugging line
         setErrorMessage("No user data found in Firestore!"); // Error displayed if no document is found
+        toast.error("No user data found in Firestore!"); // Show error message as toast
       }
     } catch (error) {
       setErrorMessage(error.message);
+      toast.error(error.message); // Show error message as toast
     }
   };
-  
-  
 
   return (
     <div className="container">
+      <ToastContainer /> {/* Render the toast container here */}
       <div className="header">
         <div className="text">{action}</div>
         <div className="underline"></div>
@@ -101,7 +98,6 @@ export const LoginSignup = () => {
 
       <div className="submit-container">
         {errorMessage && <div className="error-message">{errorMessage}</div>}
-        {successMessage && <div className="success-message">{successMessage}</div>} {/* Show success message after sign up */}
 
         {action === "Login" ? (
           <div className="submit gray" onClick={handleLogin}>Login</div>
