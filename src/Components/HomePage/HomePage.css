@@ -1,0 +1,38 @@
+.home-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh; /* Full height */
+    background-color: #f0f0f0; /* Light background color */
+    padding: 20px;
+    font-family: Arial, sans-serif; /* Font style */
+  }
+  
+  .welcome-header {
+    font-size: 2.5rem; /* Larger text for the welcome message */
+    color: #333; /* Darker text color */
+    margin-bottom: 10px;
+  }
+  
+  .email-text {
+    font-size: 1.2rem; /* Slightly larger font for email */
+    color: #666; /* Lighter text color */
+    margin-bottom: 20px;
+  }
+  
+  .logout-button {
+    padding: 10px 20px;
+    background-color: #007bff; /* Bootstrap blue color */
+    color: white; /* White text */
+    border: none;
+    border-radius: 5px; /* Rounded corners */
+    cursor: pointer; /* Pointer cursor on hover */
+    font-size: 1rem; /* Normal font size */
+    transition: background-color 0.3s; /* Transition effect */
+  }
+  
+  .logout-button:hover {
+    background-color: #0056b3; /* Darker blue on hover */
+  }
+  
